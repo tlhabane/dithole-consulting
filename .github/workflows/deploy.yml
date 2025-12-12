@@ -3,9 +3,10 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - main # Trigger the workflow on pushes to the main branch
+      - main
 
 jobs:
+  # The 'build' job remains the same (npm run build and upload-artifact)
   build:
     runs-on: ubuntu-latest
     steps:
@@ -14,37 +15,39 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Specify a modern node version
+          node-version: '20'
       - name: Install Dependencies
-        run: npm ci # Use 'npm ci' for clean, consistent installs in CI environments
+        run: npm ci
       - name: Build Project
-        # Make sure your 'build' script points to the correct build tool (e.g., react-scripts build or vite build)
         run: npm run build
-      - name: Upload Artifact to enable deployment
-        uses: actions/upload-artifact@v4
-        with:
-          name: production-files
-          path: ./dist # Ensure your build output is indeed './dist'
 
-  # Deploy Job
+      # --- NEW STEP 1: Configure Pages ---
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      # --- NEW STEP 2: Upload Artifact for Deployment ---
+      # This replaces the old 'upload-artifact' step's purpose for deployment
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist # Must match your Vite output directory
+
+  # --- NEW 'deploy' Job ---
   deploy:
+    # Requires the build job to finish
     needs: build
-    # Add permissions to ensure the default GITHUB_TOKEN can write to the gh-pages branch
+    # Must use the official 'github-pages' environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    # These permissions are mandatory for the official actions
     permissions:
       pages: write
       id-token: write
-    runs-on: ubuntu-latest
+
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: production-files
-          path: ./dist
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          # Use the default token unless REACT_GITHUB_ACTIONS is a PAT
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          # Crucial for clean deployment: forces the gh-pages branch to contain ONLY the files from the build
-          force_orphan: true
+        id: deployment
+        uses: actions/deploy-pages@v4
