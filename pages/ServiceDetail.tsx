@@ -228,7 +228,7 @@ const ServiceDetail: React.FC = () => {
                             <h3 className="font-heading text-2xl font-bold mb-4 text-slate-900">Need Immediate Help?</h3>
                             <div className="flex items-center text-slate-600 mb-2 font-sans">
                                 <Phone size={18} className="mr-2 text-cyan-600" />
-                                <span>078-158-8658</span>
+                                <span>+27 78 158 8658</span>
                             </div>
                             <div className="flex items-center text-slate-600 font-sans">
                                 <Mail size={18} className="mr-2 text-cyan-600" />
