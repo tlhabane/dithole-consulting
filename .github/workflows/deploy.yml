@@ -13,20 +13,26 @@ jobs:
         uses: actions/checkout@v4
       - name: Install Node
         uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Specify a modern node version
       - name: Install Dependencies
-        run: npm i
+        run: npm ci # Use 'npm ci' for clean, consistent installs in CI environments
       - name: Build Project
+        # Make sure your 'build' script points to the correct build tool (e.g., react-scripts build or vite build)
         run: npm run build
       - name: Upload Artifact to enable deployment
         uses: actions/upload-artifact@v4
         with:
           name: production-files
-          path: ./dist
+          path: ./dist # Ensure your build output is indeed './dist'
+
   # Deploy Job
   deploy:
-    # Add a dependency to the build job
     needs: build
-    # Specify runner + deployment step
+    # Add permissions to ensure the default GITHUB_TOKEN can write to the gh-pages branch
+    permissions:
+      pages: write
+      id-token: write
     runs-on: ubuntu-latest
     steps:
       - name: Download artifact
@@ -37,5 +43,8 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.REACT_GITHUB_ACTIONS }}
+          # Use the default token unless REACT_GITHUB_ACTIONS is a PAT
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
+          # Crucial for clean deployment: forces the gh-pages branch to contain ONLY the files from the build
+          force_orphan: true
