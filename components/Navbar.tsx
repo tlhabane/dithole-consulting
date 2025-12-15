@@ -2,6 +2,7 @@ import React, { useEffect, useState} from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Phone, Mail, ChevronDown } from 'lucide-react';
 import { services } from '../data/content';
+import Logo from './logo.png';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -55,14 +56,7 @@ const Navbar: React.FC = () => {
                 {/* Logo - Left */}
                 <div className="flex-shrink-0 flex items-center">
                     <Link to="/" onClick={() => setIsOpen(false)}>
-                        <div className="flex flex-col group">
-                  <span className="text-4xl font-bold text-slate-900 tracking-tight flex items-center font-heading leading-none">
-                      Dithole
-                      {/* Techy Logo Dot/Accent */}
-                      <span className="ml-1 inline-block w-2 h-2 rounded-full bg-gradient-to-tr from-cyan-500 to-lime-500 mb-1"></span>
-                  </span>
-                            <span className="text-lg tracking-widest text-slate-500 group-hover:text-cyan-600 transition-colors font-heading">Consulting</span>
-                        </div>
+                        <img src={Logo} alt="Dithole Consulting" style={{ maxWidth: 300, width: '50%' }} />
                     </Link>
                 </div>
 
