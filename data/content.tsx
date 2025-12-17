@@ -3,7 +3,6 @@ import { Slide, Service, Testimonial } from '../types';
 import { Monitor, Camera, PenTool, Megaphone } from 'lucide-react';
 import SelloThooe01 from '../assets/advertising/2004-sello-thooe/sello-thooe-01.jpg';
 import SelloThooe02 from '../assets/advertising/2004-sello-thooe/sello-thooe-02.jpg';
-import SelloThooe03 from '../assets/advertising/2004-sello-thooe/sello-thooe-03.jpg';
 
 export const slides: Slide[] = [
     {
@@ -252,7 +251,7 @@ export const services: Service[] = [
             /*"https://images.unsplash.com/photo-1741710466773-412b9f6482f6?auto=format&fit=crop&w=1200&q=80", // Billboard
             "https://images.unsplash.com/photo-1533069027836-fa937181a8ce?auto=format&fit=crop&w=1200&q=80", // Signage
             "https://images.unsplash.com/photo-1513757378314-e46255f6ed16?auto=format&fit=crop&w=1200&q=80" // Planning/Strategy*/
-            SelloThooe01, SelloThooe02, SelloThooe03
+            SelloThooe01, SelloThooe02
         ],
         fullDescription: (
             <div className="space-y-4 text-slate-600 font-sans">
