@@ -43,7 +43,7 @@ const Navbar: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
             <div className="flex space-x-4">
                 <span className="flex items-center hover:text-cyan-400 transition"><Phone className="w-3 h-3 mr-1" /> +27 12 320 0346</span>
-                <span className="hidden md:flex items-center hover:text-cyan-400 transition"><Mail className="w-3 h-3 mr-1" /> info@ditholeconsulting.co.za</span>
+                <span className="hidden md:flex items-center hover:text-cyan-400 transition"><Mail className="w-3 h-3 mr-1" /> info@dithole.co.za</span>
             </div>
             <div className="hidden md:block">
                 Superior products & services since 2016

@@ -1,8 +1,42 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useMemo, useState } from 'react';
+// import { Link } from 'react-router-dom';//
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
+import { ButtonSpinner } from '@/components/ButtonSpinner';
+import { type FormData, useForm } from '@/hooks/useForm';
+import { getHttpRequestConfig, useHttp } from '@/hooks/useHttp';
+import { useToast } from '@/hooks/useToast';
+
+const initialFormData: FormData = {
+    name: { value: '', error: '', type: 'text'},
+    phone: { value: '', error: '', type: 'tel' },
+    email: { value: '', error: '', type: 'email' },
+    subject: { value: '', error: '', type: 'text' },
+    message: { value: '', error: '', type: 'text' },
+};
 
 const Contact: React.FC = () => {
+    const { formData, handleInputDataUpdate, handleInputFocus, handleSubmit, resetForm } = useForm(initialFormData);
+
+    const toast = useToast();
+    const sendHttpRequest = useHttp();
+    const [submitting, setSubmitting] = useState(false);
+    const onSubmit = handleSubmit(async (validatedData, button) => {
+        try {
+            setSubmitting(true);
+            const httpRequestConfig = {
+                ...getHttpRequestConfig('POST'),
+                data: validatedData,
+                url: '/enquiry.php'
+            };
+
+            await toast(sendHttpRequest(httpRequestConfig));
+            setSubmitting(false);
+            resetForm();
+        } catch (error) {
+            setSubmitting(false);
+        }
+    });
+
   return (
     <div className="bg-white">
       {/* Map Hero */}
@@ -68,7 +102,7 @@ const Contact: React.FC = () => {
                             </div>
                             <div>
                                 <h4 className="font-heading text-2xl font-bold text-white">Email Address</h4>
-                                <p className="font-sans text-slate-300">info@ditholeconsulting.co.za</p>
+                                <p className="font-sans text-slate-300">info@dithole.co.za</p>
                             </div>
                         </div>
 
@@ -90,40 +124,109 @@ const Contact: React.FC = () => {
                 {/* Right: Form */}
                 <div className="p-10 bg-white">
                     <h2 className="font-heading text-4xl font-bold text-slate-900 mb-6">Send us a Message</h2>
-                    <form className="space-y-6" onSubmit={(e) => {
-                        e.preventDefault();
-                        alert("Message sent!");
-                    }}>
+                    <form className="space-y-6" onSubmit={onSubmit} noValidate>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                            <label className="block text-lg font-medium text-slate-700 mb-1 font-heading tracking-wide">Full Name</label>
-                                <input type="text" className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition font-sans" placeholder="John Doe" />
+                                <label className="block text-lg font-medium text-slate-700 mb-1 font-heading tracking-wide">Full Name</label>
+                                <input
+                                    type="text"
+                                    className={`w-full px-4 py-2 border border-${formData.name.error.trim() === '' ? 'slate' : 'red'}-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition font-sans`}
+                                    placeholder="John Doe"
+                                    name="name"
+                                    onChange={handleInputDataUpdate}
+                                    onBlur={handleInputFocus}
+                                    defaultValue={formData.name.value}
+                                />
+                                {formData.name.error.trim() !== '' && (
+                                    <label
+                                        className="block text-sm text-red-700 my-1 font-heading tracking-wider text-lg">
+                                        {formData.name.error}
+                                    </label>
+                                )}
                             </div>
                             <div>
                                 <label className="block text-lg font-medium text-slate-700 mb-1 font-heading tracking-wide">Phone Number</label>
-                                <input type="tel" className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition font-sans" placeholder="+27..." />
+                                <input
+                                    type="tel"
+                                    className={`w-full px-4 py-2 border border-${formData.phone.error.trim() === '' ? 'slate' : 'red'}-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition font-sans`}
+                                    placeholder="+27..."
+                                    name="phone"
+                                    onChange={handleInputDataUpdate}
+                                    onBlur={handleInputFocus}
+                                    defaultValue={formData.phone.value}
+                                />
+                                {formData.phone.error.trim() !== '' && (
+                                    <label
+                                        className="block text-sm text-red-700 my-1 font-heading tracking-wider text-lg">
+                                        {formData.phone.error}
+                                    </label>
+                                )}
                             </div>
                         </div>
                         <div>
                              <label className="block text-lg font-medium text-slate-700 mb-1 font-heading tracking-wide">Email Address</label>
-                             <input type="email" className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition font-sans" placeholder="john@example.com" />
+                             <input
+                                 type="email"
+                                 className={`w-full px-4 py-2 border border-${formData.email.error.trim() === '' ? 'slate' : 'red'}-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition font-sans`}
+                                 placeholder="john@example.com"
+                                 name="email"
+                                 onChange={handleInputDataUpdate}
+                                 onBlur={handleInputFocus}
+                                 defaultValue={formData.email.value}
+                             />
+                            {formData.email.error.trim() !== '' && (
+                                <label
+                                    className="block text-sm text-red-700 my-1 font-heading tracking-wider text-lg">
+                                    {formData.email.error}
+                                </label>
+                            )}
                         </div>
                         <div>
                              <label className="block text-lg font-medium text-slate-700 mb-1 font-heading tracking-wide">Subject</label>
-                             <select className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition font-sans">
+                             <select
+                                 className={`w-full px-4 py-2 border border-${formData.subject.error.trim() === '' ? 'slate' : 'red'}-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition font-sans`}
+                                 name="subject"
+                                 onChange={handleInputDataUpdate}
+                                 onBlur={handleInputFocus}
+                                 defaultValue={formData.subject.value}
+                             >
                                 <option>General Enquiry</option>
                                 <option>IT Services</option>
                                 <option>Surveillance</option>
                                 <option>Branding & Design</option>
                                 <option>Advertising</option>
                              </select>
+                            {formData.subject.error.trim() !== '' && (
+                                <label
+                                    className="block text-sm text-red-700 my-1 font-heading tracking-wider text-lg">
+                                    {formData.subject.error}
+                                </label>
+                            )}
                         </div>
                         <div>
                              <label className="block text-lg font-medium text-slate-700 mb-1 font-heading tracking-wide">Message</label>
-                             <textarea rows={4} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition font-sans" placeholder="How can we help you?"></textarea>
+                             <textarea
+                                 rows={4}
+                                 className={`w-full px-4 py-2 border border-${formData.message.error.trim() === '' ? 'slate' : 'red'}-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition font-sans`}
+                                 placeholder="How can we help you?"
+                                 name="message"
+                                 onChange={handleInputDataUpdate}
+                                 onBlur={handleInputFocus}
+                                 defaultValue={formData.message.value}
+                             />
+                            {formData.message.error.trim() !== '' && (
+                                <label
+                                    className="block text-sm text-red-700 my-1 font-heading tracking-wider text-lg">
+                                    {formData.message.error}
+                                </label>
+                            )}
                         </div>
-                        <button type="submit" className="w-full bg-cyan-600 text-white font-bold py-3 rounded-lg hover:bg-cyan-700 transition transform hover:-translate-y-1 shadow-lg font-heading text-2xl tracking-wide">
-                            SendMessage
+                        <button
+                            type="submit"
+                            className="w-full inline-flex items-center justify-center bg-cyan-600 text-white font-bold py-3 rounded-lg hover:bg-cyan-700 transition transform hover:-translate-y-1 shadow-lg font-heading text-2xl tracking-wide"
+                            disabled={submitting}
+                        >
+                            {submitting ? <ButtonSpinner /> : 'Send Message'}
                         </button>
                     </form>
                 </div>

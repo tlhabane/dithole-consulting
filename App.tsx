@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -115,6 +116,7 @@ const AppContent: React.FC = () => {
 const App: React.FC = () => {
   return (
       <Router>
+          <Toaster position="top-center" />
         <AppContent />
       </Router>
   );

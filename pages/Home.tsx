@@ -1,12 +1,43 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 import HeroSlider from '../components/HeroSlider';
 import ServicesCarousel from '../components/ServicesCarousel';
 import TestimonialsCarousel from '../components/TestimonialsCarousel';
 import { testimonials } from '../data/content';
-import { ArrowRight } from 'lucide-react';
+import { ButtonSpinner } from '@/components/ButtonSpinner';
+import { type FormData, useForm } from '@/hooks/useForm';
+import { getHttpRequestConfig, useHttp } from '@/hooks/useHttp';
+import { useToast } from '@/hooks/useToast';
 
+
+const initialFormData: FormData = {
+    email: { value: '', error: '', type: 'email' },
+}
 const Home: React.FC = () => {
+
+    const { formData, handleInputDataUpdate, handleInputFocus, handleSubmit, resetForm } = useForm(initialFormData);
+
+    const toast = useToast();
+    const sendHttpRequest = useHttp();
+    const [submitting, setSubmitting] = useState(false);
+    const onSubmit = handleSubmit(async (validatedData, button) => {
+        try {
+            setSubmitting(true);
+            const httpRequestConfig = {
+                ...getHttpRequestConfig('POST'),
+                data: validatedData,
+                url: '/subscribe.php'
+            };
+
+            await toast(sendHttpRequest(httpRequestConfig));
+            setSubmitting(false);
+            resetForm();
+        } catch (error) {
+            setSubmitting(false);
+        }
+    });
+
   return (
     <div className="min-h-screen">
       <HeroSlider />
@@ -64,14 +95,22 @@ const Home: React.FC = () => {
         <div className="max-w-3xl mx-auto px-4 text-center">
             <h3 className="font-heading text-3xl font-bold text-slate-800 mb-4">Stay Updated</h3>
             <p className="font-sans text-slate-600 mb-6">Subscribe to our newsletter for the latest tech insights and company news.</p>
-            <form className="flex flex-col sm:flex-row gap-4" onSubmit={(e) => e.preventDefault()}>
+            <form className="flex flex-col sm:flex-row gap-4" onSubmit={onSubmit} noValidate>
                 <input 
                     type="email" 
                     placeholder="Enter your email address" 
-                    className="flex-grow px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 font-sans"
+                    className={`flex-grow px-4 py-3 rounded-lg border border-${formData.email.error.trim() === '' ? 'slate' : 'red'}-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 font-sans`}
+                    name="email"
+                    onChange={handleInputDataUpdate}
+                    onBlur={handleInputFocus}
+                    defaultValue={formData.email.value}
                 />
-                <button type="submit" className="bg-slate-800 text-white font-semibold py-3 px-8 rounded-lg hover:bg-cyan-700 transition duration-300 font-heading text-xl tracking-wide">
-                    Subscribe
+                <button
+                    type="submit"
+                    className="bg-slate-800 inline-flex items-center justify-center text-white font-semibold py-3 px-8 rounded-lg hover:bg-cyan-700 transition duration-300 font-heading text-xl tracking-wide"
+                    disabled={submitting}
+                >
+                    {submitting ? <ButtonSpinner /> : 'Subscribe'}
                 </button>
             </form>
         </div>

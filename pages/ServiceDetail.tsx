@@ -1,7 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
-import { services } from '../data/content';
 import { ChevronRight, Phone, Mail, Plus, Minus, ArrowRight, ChevronLeft } from 'lucide-react';
+import { ButtonSpinner } from '@/components/ButtonSpinner';
+import { type FormData, useForm } from '@/hooks/useForm';
+import { getHttpRequestConfig,  useHttp } from '@/hooks/useHttp';
+import { useToast } from '@/hooks/useToast';
+import { services } from '../data/content';
 
 const FAQItem: React.FC<{ question: string; answer: string }> = ({ question, answer }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -107,9 +111,40 @@ const ContentImageSlider: React.FC<{ images: string[] }> = ({ images }) => {
     );
 };
 
+
 const ServiceDetail: React.FC = () => {
     const { slug } = useParams<{ slug: string }>();
     const service = services.find(s => s.slug === slug);
+
+    const initialFormData = useMemo<FormData>(() => ({
+        name: { value: '', error: '', type: 'text'},
+        phone: { value: '', error: '', type: 'tel' },
+        email: { value: '', error: '', type: 'email' },
+        subject: { value: service?.title || '', error: '', type: 'text' },
+        message: { value: '', error: '', type: 'text' },
+    }), [service]);
+
+    const { formData, handleInputDataUpdate, handleInputFocus, handleSubmit, resetForm } = useForm(initialFormData);
+
+    const toast = useToast();
+    const sendHttpRequest = useHttp();
+    const [submitting, setSubmitting] = useState(false);
+    const onSubmit = handleSubmit(async (validatedData, button) => {
+        try {
+            setSubmitting(true);
+            const httpRequestConfig = {
+                ...getHttpRequestConfig('POST'),
+                data: validatedData,
+                url: '/enquiry.php'
+            };
+
+            await toast(sendHttpRequest(httpRequestConfig));
+            setSubmitting(false);
+            resetForm();
+        } catch (error) {
+            setSubmitting(false);
+        }
+    });
 
     if (!service) {
         return <Navigate to="/" replace />;
@@ -199,35 +234,106 @@ const ServiceDetail: React.FC = () => {
                             <h3 className="font-heading text-3xl font-bold mb-2">Have Questions?</h3>
                             <p className="font-sans text-slate-400 text-sm mb-6">Enquire specifically about {service.title} solutions.</p>
 
-                            <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); alert("Thank you for your enquiry. We will contact you shortly."); }}>
-                                <input type="hidden" name="service" value={service.title} />
+                            <form className="space-y-4" onSubmit={onSubmit} noValidate>
+                                <input
+                                    type="hidden"
+                                    name="subject"
+                                    defaultValue={formData.subject.value}
+                                    onChange={handleInputDataUpdate}
+                                    onBlur={handleInputFocus}
+                                />
                                 <div>
-                                    <label className="block text-xs font-semibold text-cyan-400 mb-1 font-heading tracking-wider text-lg">Name</label>
-                                    <input type="text" className="w-full px-3 py-2 rounded bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition font-sans" placeholder="Your Name" />
+                                    <label
+                                        className="block text-xs font-semibold text-cyan-400 mb-1 font-heading tracking-wider text-lg">Name</label>
+                                    <input
+                                        type="text"
+                                        className={`w-full px-3 py-2 rounded bg-slate-800 border border-${formData.name.error.trim() === '' ? 'slate' : 'red'}-700 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition font-sans`}
+                                        placeholder="Your Name"
+                                        name="name"
+                                        onChange={handleInputDataUpdate}
+                                        onBlur={handleInputFocus}
+                                    />
+                                    {formData.name.error.trim() !== '' && (
+                                        <label
+                                            className="block text-sm text-red-700 my-1 font-heading tracking-wider text-lg">
+                                            {formData.name.error}
+                                        </label>
+                                    )}
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-semibold text-cyan-400 mb-1 font-heading tracking-wider text-lg">Phone</label>
-                                    <input type="tel" className="w-full px-3 py-2 rounded bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition font-sans" placeholder="Phone Number" />
+                                    <label
+                                        className="block text-xs font-semibold text-cyan-400 mb-1 font-heading tracking-wider text-lg">Phone</label>
+                                    <input
+                                        type="tel"
+                                        className={`w-full px-3 py-2 rounded bg-slate-800 border border-${formData.phone.error.trim() === '' ? 'slate' : 'red'}-700 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition font-sans`}
+                                        placeholder="Phone Number"
+                                        name="phone"
+                                        defaultValue={formData.phone.value}
+                                        onChange={handleInputDataUpdate}
+                                        onBlur={handleInputFocus}
+                                    />
+                                    {formData.phone.error.trim() !== '' && (
+                                        <label
+                                            className="block text-sm text-red-700 my-1 font-heading tracking-wider text-lg">
+                                            {formData.phone.error}
+                                        </label>
+                                    )}
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-semibold text-cyan-400 mb-1 font-heading tracking-wider text-lg">Email</label>
-                                    <input type="email" className="w-full px-3 py-2 rounded bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition font-sans" placeholder="Email Address" />
+                                    <label
+                                        className="block text-xs font-semibold text-cyan-400 mb-1 font-heading tracking-wider text-lg">Email</label>
+                                    <input
+                                        type="email"
+                                        className={`w-full px-3 py-2 rounded bg-slate-800 border border-${formData.email.error.trim() === '' ? 'slate' : 'red'}-700 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition font-sans`}
+                                        placeholder="Email Address"
+                                        name="email"
+                                        defaultValue={formData.email.value}
+                                        onChange={handleInputDataUpdate}
+                                        onBlur={handleInputFocus}
+                                    />
+                                    {formData.email.error.trim() !== '' && (
+                                        <label
+                                            className="block text-sm text-red-700 my-1 font-heading tracking-wider text-lg">
+                                            {formData.email.error}
+                                        </label>
+                                    )}
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-semibold text-cyan-400 mb-1 font-heading tracking-wider text-lg">Message</label>
-                                    <textarea rows={4} className="w-full px-3 py-2 rounded bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition font-sans" placeholder="How can we help?"></textarea>
+                                    <label
+                                        className="block text-xs font-semibold text-cyan-400 mb-1 font-heading tracking-wider text-lg">Message</label>
+                                    <textarea
+                                        rows={4}
+                                        className={`w-full px-3 py-2 rounded bg-slate-800 border border-${formData.message.error.trim() === '' ? 'slate' : 'red'}-700 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition font-sans`}
+                                        placeholder="How can we help?"
+                                        name="message"
+                                        defaultValue={formData.message.value}
+                                        onChange={handleInputDataUpdate}
+                                        onBlur={handleInputFocus}
+                                    />
+                                    {formData.message.error.trim() !== '' && (
+                                        <label
+                                            className="block text-sm text-red-700 my-1 font-heading tracking-wider text-lg">
+                                            {formData.message.error}
+                                        </label>
+                                    )}
                                 </div>
-                                <button type="submit" className="w-full bg-gradient-to-r from-cyan-600 to-lime-600 text-white font-bold py-3 rounded hover:from-cyan-500 hover:to-lime-500 transition shadow-lg font-heading text-2xl tracking-wide">
-                                    Send Enquiry
+                                <button
+                                    type="submit"
+                                    className="w-full inline-flex items-center justify-center bg-gradient-to-r from-cyan-600 to-lime-600 text-white font-bold py-3 rounded hover:from-cyan-500 hover:to-lime-500 transition shadow-lg font-heading text-2xl tracking-wide"
+                                    disabled={submitting}
+                                >
+
+                                    {submitting ? <ButtonSpinner /> : 'Send Enquiry'}
                                 </button>
                             </form>
                         </div>
 
                         {/* Quick Contact Info */}
                         <div className="border border-slate-200 p-6 rounded-lg bg-slate-50">
-                            <h3 className="font-heading text-2xl font-bold mb-4 text-slate-900">Need Immediate Help?</h3>
+                            <h3 className="font-heading text-2xl font-bold mb-4 text-slate-900">Need Immediate
+                                Help?</h3>
                             <div className="flex items-center text-slate-600 mb-2 font-sans">
-                                <Phone size={18} className="mr-2 text-cyan-600" />
+                                <Phone size={18} className="mr-2 text-cyan-600"/>
                                 <span>+27 78 158 8658</span>
                             </div>
                             <div className="flex items-center text-slate-600 font-sans">
