@@ -2,7 +2,7 @@ import React, { useEffect, useState} from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Phone, Mail, ChevronDown } from 'lucide-react';
 import { services } from '../data/content';
-import Logo from './logo.png';
+import Logo from '../assets/logo.png';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);

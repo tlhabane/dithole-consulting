@@ -1,6 +1,9 @@
 import React from 'react';
 import { Slide, Service, Testimonial } from '../types';
 import { Monitor, Camera, PenTool, Megaphone } from 'lucide-react';
+import SelloThooe01 from '../assets/advertising/2004-sello-thooe/sello-thooe-01.jpg';
+import SelloThooe02 from '../assets/advertising/2004-sello-thooe/sello-thooe-02.jpg';
+import SelloThooe03 from '../assets/advertising/2004-sello-thooe/sello-thooe-03.jpg';
 
 export const slides: Slide[] = [
     {
@@ -177,7 +180,7 @@ export const services: Service[] = [
                     Design and Branding is a complex process that involves an understanding of strategy, creativity, and the consumers. Our diverse design expertise and experience in branding, working across a wide variety of sectors, is of advantage to us.
                 </p>
                 <p>
-                    <strong>NativityConcepts™</strong> has been designing and promoting Brands since 2009, and are Tshwane’s branding experts.
+                    <strong>Dithole</strong> has been designing and promoting Brands since 2009, and are Tshwane’s branding experts.
                 </p>
                 <div className="grid md:grid-cols-2 gap-6 mt-6">
                     <div>
@@ -246,21 +249,21 @@ export const services: Service[] = [
         icon: <Megaphone className="w-6 h-6" />,
         // 3. Content Images Slider (Displayed in the content body)
         contentImages: [
-            "https://images.unsplash.com/photo-1741710466773-412b9f6482f6?auto=format&fit=crop&w=1200&q=80", // Billboard
+            /*"https://images.unsplash.com/photo-1741710466773-412b9f6482f6?auto=format&fit=crop&w=1200&q=80", // Billboard
             "https://images.unsplash.com/photo-1533069027836-fa937181a8ce?auto=format&fit=crop&w=1200&q=80", // Signage
-            "https://images.unsplash.com/photo-1513757378314-e46255f6ed16?auto=format&fit=crop&w=1200&q=80" // Planning/Strategy
+            "https://images.unsplash.com/photo-1513757378314-e46255f6ed16?auto=format&fit=crop&w=1200&q=80" // Planning/Strategy*/
+            SelloThooe01, SelloThooe02, SelloThooe03
         ],
         fullDescription: (
             <div className="space-y-4 text-slate-600 font-sans">
                 <p>
                     Dithole Consulting offers high-impact advertising solutions designed to maximize reach and engagement. We specialize in strategic placement in high-traffic zones to ensure your brand is seen by the right audience.
                 </p>
-                <h3 className="font-heading text-3xl font-bold text-slate-800 mt-6">Featured Site: N1 Highway Business Park</h3>
-
+                <h3 className="font-heading text-3xl font-bold text-slate-800 mt-6">Morena Mall, Mmabatho, Mafikeng - <i>Coming Soon</i> </h3>
                 {/* Map Container - Positioned above Stats and below Title */}
                 <div className="w-full h-80 rounded-xl overflow-hidden shadow-lg border border-slate-200 my-6">
                     <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3589.332379377626!2d28.16781257632616!3d-25.88307405130704!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e9565e63821033f%3A0x6d90d79435b7194!2sN1%20Business%20Park!5e0!3m2!1sen!2sza!4v1709903322053!5m2!1sen!2sza"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3590.815640220437!2d25.586865599999996!3d-25.842619599999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1ea2cbc6b08d41d1%3A0xbdabbe95825af527!2s2004%20Sello%20Thooe%20St%2C%20Mmabatho%20Unit%208%2C%20Mmabatho%2C%202790!5e0!3m2!1sen!2sza!4v1765928261121!5m2!1sen!2sza"
                         width="100%"
                         height="100%"
                         style={{ border: 0 }}
@@ -275,25 +278,70 @@ export const services: Service[] = [
                     <h4 className="font-heading text-2xl font-bold text-cyan-700 mb-2">OMC Stats & Reach</h4>
                     <div className="grid grid-cols-2 gap-4 mb-4">
                         <div>
-                            <p className="text-sm text-slate-500">Impacts (pm)</p>
-                            <p className="text-xl font-bold text-slate-800">5,127,534</p>
-                        </div>
-                        <div>
                             <p className="text-sm text-slate-500">Reach (pm)</p>
-                            <p className="text-xl font-bold text-slate-800">531,799</p>
+                            <p className="text-xl font-bold text-slate-800">38,000.00</p>
                         </div>
                         <div>
-                            <p className="text-sm text-slate-500">LSM</p>
-                            <p className="text-lg font-semibold text-slate-800">8-10</p>
+                            <p className="text-sm text-slate-500">Screen</p>
+                            <p className="text-lg font-semibold text-slate-800">LED Module P6.67 (2.0m x 4.0m)</p>
                         </div>
                         <div>
-                            <p className="text-sm text-slate-500">Material</p>
-                            <p className="text-lg font-semibold text-slate-800">LED (4.5m x 18m)</p>
+                            <p className="text-sm text-slate-500">Cabinet Size</p>
+                            <p className="text-lg font-semibold text-slate-800">960mm x 960mm</p>
+                        </div>
+                        <div>
+                            <p className="text-sm text-slate-500">No. of Cabinets</p>
+                            <p className="text-lg font-semibold text-slate-800">8</p>
+                        </div>
+                        <div>
+                            <p className="text-sm text-slate-500">Cards</p>
+                            <p className="text-lg font-semibold text-slate-800">Novastar</p>
+                        </div>
+                        <div>
+                            <p className="text-sm text-slate-500">Power Supply</p>
+                            <p className="text-lg font-semibold text-slate-800">G-Energy</p>
                         </div>
                     </div>
                     <p className="text-sm italic text-slate-500">
-                        Located on the N1 Freeway, Centurion. Travelling in a northerly direction. In close proximity to the N1 and N14 Interchange.
+                        Located on University Rd, Unit 8 Mmabatho, Mafikeng - Morena Mall Intersection.
                     </p>
+                </div>
+                <div className="bg-slate-50 p-6 rounded-lg border border-slate-200">
+                    <h4 className="font-heading text-2xl font-bold text-cyan-700 mb-2">Landmarks</h4>
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <p className="text-sm text-slate-500">Retail</p>
+                            <p className="text-xl font-bold text-slate-800">Morena Mall</p>
+                        </div>
+                        <div>
+                            <p className="text-sm text-slate-500">Airport</p>
+                            <p className="text-lg font-semibold text-slate-800">Mafikeng Internation Airport</p>
+                        </div>
+                        <div>
+                            <p className="text-sm text-slate-500">Education</p>
+                            <p className="text-xl font-bold text-slate-800">University of North West</p>
+                        </div>
+                        <div>
+                            <p className="text-sm text-slate-500">Sports</p>
+                            <p className="text-xl font-bold text-slate-800">Mmabatho Stadium</p>
+                        </div>
+                        <div>
+                            <p className="text-sm text-slate-500">Entertainment</p>
+                            <p className="text-lg font-semibold text-slate-800">Mmabatho Palms</p>
+                        </div>
+                        <div>
+                            <p className="text-sm text-slate-500">Grocery Retailers</p>
+                            <p className="text-lg font-semibold text-slate-800">Shoprite & Pick n Pay</p>
+                        </div>
+                        <div>
+                            <p className="text-sm text-slate-500">Restaurants</p>
+                            <p className="text-lg font-semibold text-slate-800">KFC, Chicken Licken & Nando's</p>
+                        </div>
+                        <div>
+                            <p className="text-sm text-slate-500">Filling Stations</p>
+                            <p className="text-lg font-semibold text-slate-800">Caltex & Engen</p>
+                        </div>
+                    </div>
                 </div>
                 <p className="mt-4">
                     Whether you need digital LED billboards, traditional outdoor media, or integrated campaigns, we provide the platform to showcase your brand to millions.
@@ -319,7 +367,7 @@ export const services: Service[] = [
             },
             {
                 question: "Can I target specific demographics?",
-                answer: "Yes, by selecting specific locations (like the N1 Business Park), you can target specific commuter profiles and LSM groups."
+                answer: "Yes, by selecting specific locations (like the 2004 Sello Thooe), you can target specific commuter profiles and LSM groups."
             }
         ],
         cta: {
