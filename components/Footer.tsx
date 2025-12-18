@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Linkedin, Twitter, MapPin, Phone, Mail, ChevronRight } from 'lucide-react';
+import { Facebook, Linkedin, Instagram, MapPin, Phone, Mail, ChevronRight } from 'lucide-react';
 
 const Footer: React.FC = () => {
   return (
@@ -18,9 +18,9 @@ const Footer: React.FC = () => {
               Your partner in fully outsourced IT solutions, surveillance technology, mechanical automation, and communications. Enabling growth and success for businesses since 2016.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="hover:text-cyan-400 transition transform hover:scale-110"><Facebook size={20} /></a>
-              <a href="#" className="hover:text-cyan-400 transition transform hover:scale-110"><Linkedin size={20} /></a>
-              <a href="#" className="hover:text-cyan-400 transition transform hover:scale-110"><Twitter size={20} /></a>
+              <a href="https://www.facebook.com/dithole.consulting" target="_blank" className="hover:text-cyan-400 transition transform hover:scale-110"><Facebook size={20} /></a>
+              <a href="https://www.linkedin.com/company/dithole-consulting" target="_blank" className="hover:text-cyan-400 transition transform hover:scale-110"><Linkedin size={20} /></a>
+              <a href="https://www.instagram.com/dithole.consulting" target="_blank" className="hover:text-cyan-400 transition transform hover:scale-110"><Instagram size={20} /></a>
             </div>
           </div>
 
